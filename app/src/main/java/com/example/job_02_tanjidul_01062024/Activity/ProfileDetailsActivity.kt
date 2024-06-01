@@ -1,6 +1,10 @@
 package com.example.job_02_tanjidul_01062024.Activity
 
+import UserProfile
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -8,14 +12,45 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.job_02_tanjidul_01062024.R
 
 class ProfileDetailsActivity : AppCompatActivity() {
+
+    private lateinit var userProfile: UserProfile
+
+    private lateinit var nameTextView: TextView
+    private lateinit var emailTextView: TextView
+    private lateinit var dobTextView: TextView
+    private lateinit var districtTextView: TextView
+    private lateinit var mobileTextView: TextView
+
+    private lateinit var updateProfileBTN : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_profile_details)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        userProfile = intent.getSerializableExtra("USER_PROFILE") as UserProfile
+
+        nameTextView = findViewById(R.id.nameTextView)
+        emailTextView = findViewById(R.id.emailTextView)
+        dobTextView = findViewById(R.id.dobTextView)
+        districtTextView = findViewById(R.id.districtTextView)
+        mobileTextView = findViewById(R.id.mobileTextView)
+
+        updateProfileBTN = findViewById(R.id.updateProfileBtn)
+
+        updateProfileBTN.setOnClickListener {
+            val intent = Intent(this@ProfileDetailsActivity, ProfileUpdateActivity::class.java)
+            intent.putExtra("USER_PROFILE", userProfile)
+            startActivity(intent)
         }
+
+        populateFields()
+    }
+
+    private fun populateFields() {
+        nameTextView.text = userProfile.name
+        emailTextView.text = userProfile.email
+        dobTextView.text = userProfile.dob
+        districtTextView.text = userProfile.district
+        mobileTextView.text = userProfile.mobile
+
     }
 }
